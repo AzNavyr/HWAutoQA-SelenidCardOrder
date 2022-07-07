@@ -1,8 +1,11 @@
+package ru.netology.negative.tests;
+
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -14,50 +17,15 @@ import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CardDelivery {
+public class CardDeliveryNegative {
 
     @BeforeEach
     void setAll(){
         Configuration.browser = "firefox";
-        Configuration.holdBrowserOpen = true;
+//        Configuration.holdBrowserOpen = true;
         Configuration.browserSize = "874x769";
         open("http://localhost:9999");
     }
-
-    //===================ToDO Positive test scenario: ==================
-
-    @Test
-    void shouldCorrectlyFilledOutForm(){
-        $("[data-test-id=city] .input__control").val("Симферополь");
-        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        $x("//input[@type= 'tel']").val(date);
-        $("[data-test-id=name] .input__control").val("Шувалов Дмитрий");
-        $("[data-test-id=\"phone\"] input").val("+79788885522");
-        $("[data-test-id='agreement']").click();
-        $$("[role=\"button\"]").find(Condition.exactText("Забронировать")).click();
-        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $(".notification__content")
-                .shouldHave(Condition.text("Встреча успешно забронирована на " +date))
-                .shouldBe(visible, Duration.ofSeconds(15));
-    }
-
-    @Test
-    void shouldEnterHyphenatedName(){
-        $("[data-test-id=city] .input__control").val("Симферополь");
-        String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        $x("//input[@type= 'tel']").val(date);
-        $("[data-test-id=name] .input__control").val("Шувалов Максим-Иван");
-        $("[data-test-id=\"phone\"] input").val("+79788885522");
-        $("[data-test-id='agreement']").click();
-        $$("[role=\"button\"]").find(Condition.exactText("Забронировать")).click();
-        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $(".notification__content")
-                .shouldHave(Condition.text("Встреча успешно забронирована на " +date))
-                .shouldBe(visible, Duration.ofSeconds(15));
-    }
-
-
-    //=================ToDo Negative test scenario: ====================
 
     @Test
     void shouldTestingEmptyCity(){
@@ -74,6 +42,7 @@ public class CardDelivery {
     void shouldWrongCity(){
         $("[data-test-id=city] .input__control").val("Simferopol");
         String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@type= 'tel']").val(date);
         $("[data-test-id=name] .input__control").val("Шувалов Дмитрий");
         $("[data-test-id=\"phone\"] input").val("+79788885522");
@@ -88,6 +57,7 @@ public class CardDelivery {
     void shouldEnterTodayDate(){
         $("[data-test-id=city] .input__control").val("Симферополь");
         String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@type= 'tel']").val(date);
         $("[data-test-id=name] .input__control").val("Шувалов Дмитрий");
         $("[data-test-id=\"phone\"] input").val("+79788885522");
@@ -100,6 +70,7 @@ public class CardDelivery {
     void shouldEnterWrongName(){
         $("[data-test-id=city] .input__control").val("Симферополь");
         String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@type= 'tel']").val(date);
         $("[data-test-id=name] .input__control").val("Ivanov Petr");
         $("[data-test-id=\"phone\"] input").val("+79788885522");
@@ -112,6 +83,7 @@ public class CardDelivery {
     void shouldEnterTwelveDigitsOfTheNumber(){
         $("[data-test-id=city] .input__control").val("Москва");
         String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@type= 'tel']").val(date);
         $("[data-test-id=name] .input__control").val("Шувалов Дмитрий");
         $("[data-test-id=\"phone\"] input").val("+711223344556");
